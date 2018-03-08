@@ -72,7 +72,11 @@ func runWithContext(ctx context.Context) error {
 	osbMetrics := metrics.New()
 	reg.MustRegister(osbMetrics)
 
-	api, err := rest.NewAPISurface(businessLogic, osbMetrics)
+	extensions := []rest.FeatureExtender{
+		&rest.AsyncBindExtension{Logic: businessLogic},
+	}
+
+	api, err := rest.NewExtendedAPISurface(businessLogic, osbMetrics, extensions)
 	if err != nil {
 		return err
 	}

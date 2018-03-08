@@ -172,6 +172,19 @@ func (b *BusinessLogic) ValidateBrokerAPIVersion(version string) error {
 	return nil
 }
 
+// async bind extension methods
+func (b *BusinessLogic) GetBinding(
+	request *osb.GetBindingRequest, c *broker.RequestContext,
+) (*osb.GetBindingResponse, error) {
+	return &osb.GetBindingResponse{}, nil
+}
+
+func (b *BusinessLogic) BindingLastOperation(
+	request *osb.BindingLastOperationRequest, c *broker.RequestContext,
+) (*osb.LastOperationResponse, error) {
+	return &osb.LastOperationResponse{}, nil
+}
+
 // example types
 
 // exampleInstance is intended as an example of a type that holds information about a service instance
