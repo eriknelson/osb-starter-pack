@@ -15,14 +15,9 @@ import (
 	"github.com/pmorie/osb-broker-lib/pkg/rest"
 )
 
-// Server is the server for the OSB REST API and the metrics API. A Server glues
-// the HTTP operations to their implementations.
 type Server struct {
-	// Router is a mux.Router that registers the handlers for the HTTP
-	// operations:
-	//
-	// - OSB API
-	// - metrics API
+	// Router is a mux.Router that registers the handlers for the different OSB
+	// API operations.
 	Router *mux.Router
 }
 
@@ -37,10 +32,6 @@ func New(api *rest.APISurface, reg prom.Gatherer) *Server {
 	router.HandleFunc("/v2/service_instances/{instance_id}", api.UpdateHandler).Methods("PATCH")
 	router.HandleFunc("/v2/service_instances/{instance_id}/service_bindings/{binding_id}", api.BindHandler).Methods("PUT")
 	router.HandleFunc("/v2/service_instances/{instance_id}/service_bindings/{binding_id}", api.UnbindHandler).Methods("DELETE")
-
-	for _, extension := range api.Extensions {
-		router = extension.Extend(api, router)
-	}
 
 	router.Handle("/metrics", promhttp.HandlerFor(reg, promhttp.HandlerOpts{}))
 
